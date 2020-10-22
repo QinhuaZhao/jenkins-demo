@@ -17,6 +17,7 @@ pipeline {
         container('busybox') {
           sh 'echo BUSYBOX_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}'
           sh '/bin/busybox'
+          sh 'wget -q -O -  localhost:8080/hello'
         }
       }
     }
