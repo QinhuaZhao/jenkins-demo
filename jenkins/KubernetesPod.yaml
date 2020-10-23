@@ -6,7 +6,7 @@ spec:
     - name: repository
       hostPath:
         path: /root/.m2/repository
-        type: Directory
+        type: DirectoryOrCreate
   containers:
   - name: jnlp
     env:
