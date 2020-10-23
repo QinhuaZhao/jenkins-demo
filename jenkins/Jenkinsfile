@@ -22,7 +22,7 @@ pipeline {
 //             echo ${REPO}
 //             echo ${BRANCH}
             echo 'echo end'
-            git branch: 'mester', credentialsId: '', url: 'https://github.com/QinhuaZhao/demo.git'
+            git branch: 'master', credentialsId: '', url: 'https://github.com/QinhuaZhao/demo.git'
         }
     }
     stage('Run maven') {
