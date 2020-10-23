@@ -1,10 +1,30 @@
 pipeline {
+
   agent {
     kubernetes {
       yamlFile 'jenkins/KubernetesPod.yaml'
     }
   }
+
+  environment{
+    IMAGE_TAG =  sh(returnStdout: true,script: 'echo $image_tag').trim()
+    ORIGIN_REPO =  sh(returnStdout: true,script: 'echo $origin_repo').trim()
+    REPO =  sh(returnStdout: true,script: 'echo $repo').trim()
+    BRANCH =  sh(returnStdout: true,script: 'echo $branch').trim()
+  }
+  
   stages {
+    stage('Git'){
+        steps{
+            echo 'echo begin'
+            echo ${IMAGE_TAG}
+            echo ${ORIGIN_REPO}
+            echo ${REPO}
+            echo ${BRANCH}
+            echo 'echo end'
+            //git branch: '${BRANCH}', credentialsId: '', url: 'https://github.com/AliyunContainerService/jenkins-demo.git'
+        }
+    }
     stage('Run maven') {
       steps {
         sh 'set'
@@ -17,7 +37,6 @@ pipeline {
         container('busybox') {
           sh 'echo BUSYBOX_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}'
           sh '/bin/busybox'
-          sh 'wget -q -O -  localhost:8080/hello'
         }
       }
     }
