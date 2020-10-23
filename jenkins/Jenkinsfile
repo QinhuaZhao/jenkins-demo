@@ -12,7 +12,7 @@ pipeline {
     REPO =  sh(returnStdout: true,script: 'echo $repo').trim()
     BRANCH =  sh(returnStdout: true,script: 'echo $branch').trim()
   }
-  
+
   stages {
     stage('Git'){
         steps{
