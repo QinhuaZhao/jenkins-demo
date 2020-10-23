@@ -7,11 +7,11 @@ spec:
       hostPath:
         path: /root/.m2/repository
         type: DirectoryOrCreate
-    - name: jenkins-docker-cfg
+    - name: docker-cfg
       projected:
         sources:
           - secret:
-              name: kaniko-docker-regcred
+              name: regcred
               items:
                 - key: .dockerconfigjson
                   path: config.json
@@ -34,13 +34,13 @@ spec:
     - name: kaniko
       image: gcr.io/kaniko-project/executor:v1.2.0
       command:
-        - cat
+        - /busybox/cat
       tty: true
       env:
         - name: CONTAINER_ENV_VAR
           value: kaniko
       volumeMounts:
-        - name: jenkins-docker-cfg
+        - name: docker-cfg
           mountPath: /kaniko/.docker
     - name: busybox
       image: busybox
