@@ -7,6 +7,14 @@ spec:
       hostPath:
         path: /root/.m2/repository
         type: DirectoryOrCreate
+    - name: kaniko-docker-regcred
+      projected:
+        sources:
+          - secret:
+              name: regcred
+              items:
+                - key: .dockerconfigjson
+                  path: config.json
   containers:
     - name: jnlp
       env:
