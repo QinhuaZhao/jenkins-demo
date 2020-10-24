@@ -5,11 +5,11 @@ pipeline {
     }
   }
   environment{
-    APP_NAME="jenkins-demo"
-    ORIGIN_REPO="https://index.docker.io/v1"
-    REPO="qinhuazhao"
-    IMAGE_NAME="jenkins-demo"
-    IMAGE_TAG="latest"
+    APP_NAME='jenkins-demo'
+    ORIGIN_REPO='https://index.docker.io/v1'
+    REPO='qinhuazhao'
+    IMAGE_NAME='jenkins-demo'
+    IMAGE_TAG='latest'
         //IMAGE_TAG =  sh(returnStdout: true,script: 'echo $image_tag').trim()
         //ORIGIN_REPO =  sh(returnStdout: true,script: 'echo $origin_repo').trim()
         //REPO =  sh(returnStdout: true,script: 'echo $repo').trim()
@@ -39,7 +39,7 @@ pipeline {
     stage('Image Build And Publish'){
       steps{
         container("kaniko") {
-          sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --cache=true --destination=${REPO}/${IMAGE_NAME}:${IMAGE_TAG}'
+          sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --cache=true --destination=${ORIGIN_REPO}/${REPO}/${IMAGE_NAME}:${IMAGE_TAG}'
           //sh "kaniko -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --cache=true --destination=${ORIGIN_REPO}/${REPO}/${IMAGE_NAME}:${IMAGE_TAG}"
         }
       }
