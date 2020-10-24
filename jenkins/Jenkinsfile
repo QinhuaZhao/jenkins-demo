@@ -52,6 +52,13 @@ pipeline {
       script{
         println("always")
       }
+      stages{
+        stage('Example') {
+          steps{
+            echo 'Hello World'
+          }
+        }
+      }
     }
     success{
       script{
