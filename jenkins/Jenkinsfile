@@ -6,7 +6,7 @@ pipeline {
   }
   environment{
     APP_NAME="jenkins-demo"
-    ORIGIN_REPO="https://index.docker.io/v1/"
+    ORIGIN_REPO="https://index.docker.io/v1"
     REPO="qinhuazhao"
     IMAGE_NAME="jenkins-demo"
     IMAGE_TAG="latest"
