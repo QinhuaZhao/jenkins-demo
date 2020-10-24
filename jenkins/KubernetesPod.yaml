@@ -32,7 +32,7 @@ spec:
         - name: repository
           mountPath: /root/.m2/repository
     - name: kaniko
-      image: gcr.io/kaniko-project/executor:v1.2.0
+      image: gcr.io/kaniko-project/executor:debug-539ddefcae3fd6b411a95982a830d987f4214251
       command:
         - /busybox/cat
       tty: true
