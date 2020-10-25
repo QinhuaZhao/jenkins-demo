@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins-demo-app
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: jenkins-demo-app
+      release: dev
+  template:
+    metadata:
+      labels:
+        app: jenkins-demo-app
+        release: dev
+    spec:
+      containers:
+        - name: jenkins-demo-containers
+          image: registry.cn-hangzhou.aliyuncs.com/qianxin-hub/jenkins-demo:latest
+          ports:
+            - name: http
+              containerPort: 8080

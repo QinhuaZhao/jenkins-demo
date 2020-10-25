@@ -23,16 +23,16 @@ pipeline {
     }
     stage('Run maven') {
       steps {
-        sh 'set'
-        sh "echo OUTSIDE_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}"
+        //sh 'set'
+        //sh "echo OUTSIDE_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}"
         container('maven') {
           sh 'echo MAVEN_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}'
           sh 'mvn -version'
           sh 'mvn package -B -DskipTests'
         }
-        container('busybox') {
-          sh 'echo BUSYBOX_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}'
-          sh '/bin/busybox'
+        //container('busybox') {
+        //  sh 'echo BUSYBOX_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}'
+        //  sh '/bin/busybox'
         }
       }
     }
@@ -42,11 +42,18 @@ pipeline {
           sh 'kubectl get pod'
         }
         container('kaniko') {
-          sh "echo ${CONTAINER_ENV_VAR}"
-          sh 'ls'
-          sh 'cat /kaniko/.docker/config.json'
-          sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --cache=true --verbosity=debug --destination=${ORIGIN_REPO}/${REPO}/${IMAGE_NAME}:${IMAGE_TAG}'
+          //sh "echo ${CONTAINER_ENV_VAR}"
+          //sh 'ls'
+          //sh 'cat /kaniko/.docker/config.json'
+          sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --cache=true --verbosity=debug --destination=${REPO}/${IMAGE_NAME}:${IMAGE_TAG}'
           //sh "kaniko -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --cache=true --destination=${ORIGIN_REPO}/${REPO}/${IMAGE_NAME}:${IMAGE_TAG}"
+        }
+      }
+    }
+    stage('Deploy to Kubernetes'){
+      steps{
+        container('kubectl'){
+          sh 'kubectl apply -f jenkins-demo-deployment.yaml'
         }
       }
     }
