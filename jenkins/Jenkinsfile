@@ -57,9 +57,9 @@ pipeline {
   }
   post{
     always{
-       container('busybox') {
-         sh 'echo BUSYBOX_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}'
-         sh '/bin/busybox'
+      container('busybox') {
+        sh 'echo BUSYBOX_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}'
+        sh '/bin/busybox'
       }
       script{
         println("always")
