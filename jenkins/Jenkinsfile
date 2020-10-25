@@ -41,7 +41,7 @@ pipeline {
         container("kaniko") {
           sh 'ls'
           sh 'cat /kaniko/.docker/config.json'
-          sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify  --destination=${ORIGIN_REPO}/${REPO}/${IMAGE_NAME}:${IMAGE_TAG}'
+          sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --destination=${ORIGIN_REPO}/${REPO}/${IMAGE_NAME}:${IMAGE_TAG}'
           //sh "kaniko -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --cache=true --destination=${ORIGIN_REPO}/${REPO}/${IMAGE_NAME}:${IMAGE_TAG}"
         }
       }
@@ -51,9 +51,6 @@ pipeline {
     always{
       script{
         println("always")
-      }
-      steps{
-        echo 'Hello World'
       }
     }
     success{

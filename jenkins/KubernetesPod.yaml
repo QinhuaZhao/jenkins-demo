@@ -3,9 +3,13 @@ metadata:
     some-label: some-label-value
 spec:
   volumes:
-    - name: repository
+    - name: maven-repository
       hostPath:
         path: /root/.m2/repository
+        type: DirectoryOrCreate
+    - name: kaniko-cache
+      hostPath:
+        path: /tmp/kaniko-cache"
         type: DirectoryOrCreate
     - name: docker-cfg
       projected:
@@ -29,12 +33,15 @@ spec:
         - name: CONTAINER_ENV_VAR
           value: maven
       volumeMounts:
-        - name: repository
+        - name: maven-repository
           mountPath: /root/.m2/repository
         - name: docker-cfg
           mountPath: /root/.docker
     - name: kaniko
       image: gcr.io/kaniko-project/executor:debug
+      args:
+        - --cache=true
+        - --cache-dir=/cache
       command:
         - /busybox/cat
       tty: true
@@ -42,6 +49,8 @@ spec:
         - name: CONTAINER_ENV_VAR
           value: kaniko
       volumeMounts:
+        - name: kaniko-cache
+          mountPath: /cache
         - name: docker-cfg
           mountPath: /kaniko/.docker
     - name: busybox
