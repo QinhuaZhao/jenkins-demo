@@ -44,9 +44,9 @@ spec:
         - --image=openjdk:8-alpine
       #args: [ "--cache-dir=/cache",
       #        "--image=openjdk:8-alpine" ]
-      env:
-        - name: CONTAINER_ENV_VAR
-          value: kaniko-warmer
+      #env:
+      #  - name: CONTAINER_ENV_VAR
+      #    value: kaniko-warmer
       volumeMounts:
         - name: kaniko-cache
           mountPath: /cache
