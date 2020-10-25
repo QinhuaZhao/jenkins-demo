@@ -39,9 +39,6 @@ spec:
           mountPath: /root/.docker
     - name: kaniko
       image: gcr.io/kaniko-project/executor:debug
-      args:
-        - --cache=true
-        - --cache-dir=/cache
       command:
         - /busybox/cat
       tty: true
