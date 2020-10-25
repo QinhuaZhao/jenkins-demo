@@ -37,22 +37,22 @@ spec:
           mountPath: /root/.m2/repository
         - name: docker-cfg
           mountPath: /root/.docker
-    - name: kaniko-warmer
-      image: gcr.io/kaniko-project/warmer:v1.2.0
-      args:
-        - --cache-dir=/cache
-        - --image=openjdk:8-alpine
+    #- name: kaniko-warmer
+    #  image: gcr.io/kaniko-project/warmer:v1.2.0
+    #  args:
+    #    - --cache-dir=/cache
+    #    - --image=openjdk:8-alpine
       #args: [ "--cache-dir=/cache",
       #        "--image=openjdk:8-alpine" ]
       #env:
       #  - name: CONTAINER_ENV_VAR
       #    value: kaniko-warmer
-      volumeMounts:
-        - name: kaniko-cache
-          mountPath: /cache
-        - name: docker-cfg
-          mountPath: /kaniko/.docker
-      restartPolicy: Never
+    #  volumeMounts:
+    #    - name: kaniko-cache
+    #      mountPath: /cache
+    #    - name: docker-cfg
+    #      mountPath: /kaniko/.docker
+    #  restartPolicy: Never
     - name: kaniko
       image: gcr.io/kaniko-project/executor:debug
       command:
