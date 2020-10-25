@@ -30,13 +30,14 @@ pipeline {
           sh 'mvn -version'
           sh 'mvn package -B -DskipTests'
         }
+        container('kubectl') {
+          sh 'kubectl version'
+        }
         container('busybox') {
           sh 'echo BUSYBOX_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}'
           sh '/bin/busybox'
         }
-        container('kubectl') {
-          sh 'kubectl get pod -A'
-        }
+
       }
     }
     stage('Image Build And Publish'){
