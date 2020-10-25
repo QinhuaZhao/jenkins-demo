@@ -38,9 +38,6 @@ pipeline {
     }
     stage('Image Build And Publish'){
       steps{
-        container('kubectl'){
-          sh 'kubectl get pod'
-        }
         container('kaniko') {
           //sh "echo ${CONTAINER_ENV_VAR}"
           //sh 'ls'
