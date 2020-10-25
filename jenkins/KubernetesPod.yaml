@@ -38,7 +38,7 @@ spec:
         - name: docker-cfg
           mountPath: /root/.docker
     - name: kaniko-warmer
-      image: gcr.io/kaniko-project/warmer:latest
+      image: gcr.io/kaniko-project/warmer:v1.2.0
       args:
         - --cache-dir=/cache
         - --image=openjdk:8-alpine
