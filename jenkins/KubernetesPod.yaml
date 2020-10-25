@@ -39,8 +39,11 @@ spec:
           mountPath: /root/.docker
     - name: kaniko-warmer
       image: gcr.io/kaniko-project/warmer:latest
-      args: [ "--cache-dir=/cache",
-              "--image=openjdk:8-alpine" ]
+      args:
+        - --cache-dir=/cache
+        - --image=openjdk:8-alpine
+      #args: [ "--cache-dir=/cache",
+      #        "--image=openjdk:8-alpine" ]
       env:
         - name: CONTAINER_ENV_VAR
           value: kaniko-warmer
@@ -81,4 +84,3 @@ spec:
       env:
         - name: CONTAINER_ENV_VAR
           value: kubectl
-
