@@ -30,19 +30,18 @@ pipeline {
           sh 'mvn -version'
           sh 'mvn package -B -DskipTests'
         }
-        container('kubectl') {
-          sh 'ls -a'
-        }
         container('busybox') {
           sh 'echo BUSYBOX_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}'
           sh '/bin/busybox'
         }
-
       }
     }
     stage('Image Build And Publish'){
       steps{
-        container("kaniko") {
+        container('kubectl'){
+          kubectl get pod
+        }
+        container('kaniko') {
           sh "echo ${CONTAINER_ENV_VAR}"
           sh 'ls'
           sh 'cat /kaniko/.docker/config.json'
