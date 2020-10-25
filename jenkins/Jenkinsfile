@@ -31,7 +31,7 @@ pipeline {
           sh 'mvn package -B -DskipTests'
         }
         container('kubectl') {
-          sh 'kubectl version'
+          sh 'ls -a'
         }
         container('busybox') {
           sh 'echo BUSYBOX_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}'
