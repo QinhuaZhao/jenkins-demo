@@ -59,7 +59,9 @@ spec:
         - name: CONTAINER_ENV_VAR
           value: busybox
     - name: kubectl
-      image: bitnami/kubectl:1.18
+      image: bitnami/kubectl:1.18.8
+      securityContext:
+        privileged: true
       command:
         - cat
       tty: true
