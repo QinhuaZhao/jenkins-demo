@@ -61,7 +61,7 @@ spec:
     - name: kubectl
       image: bitnami/kubectl:1.18.8
       securityContext:
-        privileged: true
+        runAsUser: 1000
       command:
         - cat
       tty: true
