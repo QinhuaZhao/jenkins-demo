@@ -33,7 +33,7 @@ pipeline {
         //container('busybox') {
         //  sh 'echo BUSYBOX_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}'
         //  sh '/bin/busybox'
-        }
+        //}
       }
     }
     stage('Image Build And Publish'){
