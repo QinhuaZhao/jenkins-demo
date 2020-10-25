@@ -18,7 +18,7 @@ pipeline {
   stages {
     stage('Git'){
       steps{
-        //git branch: 'master', credentialsId: '', url: 'https://github.com/QinhuaZhao/demo.git'
+        git branch: 'master', credentialsId: '', url: 'https://github.com/QinhuaZhao/demo.git'
       }
     }
     stage('Run maven') {
