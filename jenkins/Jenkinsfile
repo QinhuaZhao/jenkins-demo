@@ -43,7 +43,7 @@ pipeline {
         container('kaniko') {
           //sh "echo ${CONTAINER_ENV_VAR}"
           //sh 'ls'
-          //sh 'cat /kaniko/.docker/config.json'
+          sh 'cat /kaniko/.docker/config.json'
           sh '/kaniko/warmer --cache-dir=/cache --verbosity=debug --image=openjdk:8-alpine'
           sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --cache=true --cache-dir=/cache --verbosity=debug --destination=${ORIGIN_REPO}/${REPO}/${IMAGE_NAME}:${IMAGE_TAG}'
           //sh "kaniko -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --cache=true --destination=${ORIGIN_REPO}/${REPO}/${IMAGE_NAME}:${IMAGE_TAG}"
