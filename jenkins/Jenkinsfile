@@ -6,7 +6,7 @@ pipeline {
   }
   environment{
     APP_NAME='jenkins-demo'
-    ORIGIN_REPO='index.docker.io'
+    ORIGIN_REPO='registry-1.docker.io'
     //ORIGIN_REPO='registry.cn-hangzhou.aliyuncs.com'
     REPO='qinhuazhao'
     //REPO='qianxin-hub'
