@@ -7,7 +7,7 @@ pipeline {
   environment{
     APP_NAME='jenkins-demo'
     ORIGIN_REPO='registry.cn-hangzhou.aliyuncs.com'
-    REPO='qianxin-hub'
+    REPO='qinhuazhao'
     IMAGE_NAME='jenkins-demo'
     IMAGE_TAG='latest'
     //IMAGE_TAG =  sh(returnStdout: true,script: 'echo $image_tag').trim()

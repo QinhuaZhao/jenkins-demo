@@ -17,7 +17,7 @@ spec:
       projected:
         sources:
           - secret:
-              name: aliyun-registry-regcred
+              name: dockerhub-registry-regcred
               items:
                 - key: .dockerconfigjson
                   path: config.json
