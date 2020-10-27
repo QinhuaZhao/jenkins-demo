@@ -11,7 +11,7 @@ pipeline {
     REPO='qinhuazhao'
     //REPO='qianxin-hub'
     IMAGE_NAME='jenkins-demo'
-    IMAGE_TAG='latest'
+    IMAGE_TAG='v6'
     //IMAGE_TAG =  sh(returnStdout: true,script: 'echo $image_tag').trim()
     //ORIGIN_REPO =  sh(returnStdout: true,script: 'echo $origin_repo').trim()
     //REPO =  sh(returnStdout: true,script: 'echo $repo').trim()
@@ -45,7 +45,7 @@ pipeline {
           //sh 'ls'
           sh 'cat /kaniko/.docker/config.json'
           sh '/kaniko/warmer --cache-dir=/cache --verbosity=debug --image=openjdk:8-alpine'
-          sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --cache=true --cache-dir=/cache --verbosity=debug --destination=${ORIGIN_REPO}/${REPO}/${IMAGE_NAME}:${IMAGE_TAG}'
+          sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --cache=true --cache-dir=/cache --skip-tls-verify --verbosity=debug --destination=${ORIGIN_REPO}/${REPO}/${IMAGE_NAME}:${IMAGE_TAG}'
           //sh "kaniko -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --cache=true --destination=${ORIGIN_REPO}/${REPO}/${IMAGE_NAME}:${IMAGE_TAG}"
         }
       }
