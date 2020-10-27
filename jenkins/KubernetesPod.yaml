@@ -65,14 +65,14 @@ spec:
 #          mountPath: /cache
 #        - name: docker-cfg
 #          mountPath: /kaniko/.docker
-#    - name: busybox
-#      image: busybox:1.32
-#      command:
-#        - cat
-#      tty: true
-#      env:
-#        - name: CONTAINER_ENV_VAR
-#          value: busybox
+    - name: busybox
+      image: busybox:1.32
+      command:
+        - cat
+      tty: true
+      env:
+        - name: CONTAINER_ENV_VAR
+          value: busybox
     - name: kubectl
       image: bitnami/kubectl:1.18.8
       securityContext:
