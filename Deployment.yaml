@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: jenkins-demo-containers
-          image: registry.cn-hangzhou.aliyuncs.com/qianxin-hub/jenkins-demo:latest
+          image: qinhuazhao/jenkins-demo:latest
           ports:
             - name: http
               containerPort: 8080

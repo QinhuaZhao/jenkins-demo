@@ -11,7 +11,7 @@ pipeline {
     REPO='qinhuazhao'
     //REPO='qianxin-hub'
     IMAGE_NAME='jenkins-demo'
-    IMAGE_TAG='v6'
+    IMAGE_TAG='latest'
     //IMAGE_TAG =  sh(returnStdout: true,script: 'echo $image_tag').trim()
     //ORIGIN_REPO =  sh(returnStdout: true,script: 'echo $origin_repo').trim()
     //REPO =  sh(returnStdout: true,script: 'echo $repo').trim()
