@@ -1,28 +1,35 @@
 pipeline {
   agent {
+//     node{
+//       label 'slave-pipeline'
+//     }
     kubernetes {
       yamlFile 'jenkins/JenkinsJnlpPod.yaml'
     }
   }
   environment{
-    APP_NAME='jenkins-demo'
+    //DEPLOY = "${env.BRANCH_NAME == "master" || env.BRANCH_NAME == "develop" ? "true" : "false"}"
+    APP_NAME = readMavenPom().getArtifactId()
+    VERSION = readMavenPom().getVersion()
+
     ORIGIN_REPO='index.docker.io'
-    //ORIGIN_REPO='registry.cn-hangzhou.aliyuncs.com'
-    REPO='qinhuazhao'
-    //REPO='qianxin-hub'
-    IMAGE_NAME='jenkins-demo'
-    IMAGE_TAG='latest'
+    REPO_NAMESPACE='qinhuazhao'
+    IMAGE_NAME = readMavenPom().getArtifactId()
+    IMAGE_TAG = readMavenPom().getVersion()
+
+    DOMAIN = readMavenPom().getArtifactId()
+
     //IMAGE_TAG =  sh(returnStdout: true,script: 'echo $image_tag').trim()
     //ORIGIN_REPO =  sh(returnStdout: true,script: 'echo $origin_repo').trim()
     //REPO =  sh(returnStdout: true,script: 'echo $repo').trim()
     //BRANCH =  sh(returnStdout: true,script: 'echo $branch').trim()
   }
   stages {
-    stage('Git'){
-      steps{
-        git branch: 'master', credentialsId: '', url: 'https://github.com/QinhuaZhao/demo.git'
-      }
-    }
+//     stage('Git'){
+//       steps{
+//         git branch: 'master', credentialsId: '', url: 'https://github.com/QinhuaZhao/demo.git'
+//       }
+//     }
     stage('Run maven') {
       steps {
         //sh 'set'
@@ -45,15 +52,25 @@ pipeline {
           //sh 'ls'
           sh 'cat /kaniko/.docker/config.json'
           sh '/kaniko/warmer --cache-dir=/cache --verbosity=debug --image=openjdk:8-alpine'
-          sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --cache=true --cache-dir=/cache --skip-tls-verify --verbosity=debug --destination=${ORIGIN_REPO}/${REPO}/${IMAGE_NAME}:${IMAGE_TAG}'
+          sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --cache=true --cache-dir=/cache --skip-tls-verify --verbosity=debug --destination=${ORIGIN_REPO}/${REPO_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}'
           //sh "kaniko -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --cache=true --destination=${ORIGIN_REPO}/${REPO}/${IMAGE_NAME}:${IMAGE_TAG}"
         }
       }
     }
-    stage('Deploy to Kubernetes'){
-      steps{
-        container('kubectl'){
-          sh 'kubectl apply -f Deployment.yaml'
+//     stage('Deploy to Kubernetes'){
+//       steps{
+//         container('kubectl'){
+//           sh 'kubectl apply -f Deployment.yaml'
+//         }
+//       }
+//     }
+    stage('Kubernetes Deploy') {
+//       when {
+//         environment name: 'DEPLOY', value: 'true'
+//       }
+      steps {
+        container('helm') {
+          sh "helm upgrade --install --force --set name=${APP_NAME} --set image.repository=${ORIGIN_REPO}/${REPO_NAMESPACE}/${IMAGE_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${APP_NAME}  ./helm"
         }
       }
     }
