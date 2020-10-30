@@ -3,6 +3,9 @@ kind: Service
 metadata:
   name: {{ .Values.name }}-service
 spec:
+{{- if not .Values.controller.service.omitClusterIP }}
+  {{ with .Values.controller.service.clusterIP }}clusterIP: {{ quote . }}{{ end }}
+{{- end }}
   ports:
     - name: http
       targetPort: {{ .Values.service.port }}

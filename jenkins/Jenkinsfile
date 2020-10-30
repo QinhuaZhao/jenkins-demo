@@ -71,7 +71,7 @@ pipeline {
 //       }
       steps {
         container('helm') {
-          sh "helm upgrade --install --force=false --set name=${APP_NAME} --set image.repository=${ORIGIN_REPO}/${REPO_NAMESPACE}/${IMAGE_NAME} --set image.tag=${IMAGE_TAG} --set domain=${DOMAIN} ${APP_NAME}  ./helm"
+          sh "helm upgrade --install --force --set name=${APP_NAME} --set image.repository=${ORIGIN_REPO}/${REPO_NAMESPACE}/${IMAGE_NAME} --set image.tag=${IMAGE_TAG} --set domain=${DOMAIN} --set controller.service.omitClusterIP=true ${APP_NAME}  ./helm"
         }
       }
     }
