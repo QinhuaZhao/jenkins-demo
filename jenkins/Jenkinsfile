@@ -15,7 +15,8 @@ pipeline {
     ORIGIN_REPO='index.docker.io'
     REPO_NAMESPACE='qinhuazhao'
     IMAGE_NAME = readMavenPom().getArtifactId()
-    IMAGE_TAG = readMavenPom().getVersion()
+    //IMAGE_TAG = readMavenPom().getVersion()
+    IMAGE_TAG = 'latest'
 
     DOMAIN = 'localhost'
 
