@@ -14,9 +14,8 @@ pipeline {
 
     ORIGIN_REPO='index.docker.io'
     REPO_NAMESPACE='qinhuazhao'
-    IMAGE_NAME = "${readMavenPom().getArtifactId() + "-" + readMavenPom().getVersion()}"
-    //IMAGE_TAG = readMavenPom().getVersion()
-    IMAGE_TAG = 'latest'
+    IMAGE_NAME = ${APP_NAME}
+    IMAGE_TAG = "${env.BRANCH_NAME + "-" + env.GIT_COMMIT}"
 
     DOMAIN = 'localhost'
 
