@@ -14,7 +14,7 @@ pipeline {
 
     ORIGIN_REPO='index.docker.io'
     REPO_NAMESPACE='qinhuazhao'
-    IMAGE_NAME = readMavenPom().getArtifactId()
+    IMAGE_NAME = readMavenPom().getArtifactId() + '-' +readMavenPom().getVersion()
     //IMAGE_TAG = readMavenPom().getVersion()
     IMAGE_TAG = 'latest'
 
@@ -33,8 +33,8 @@ pipeline {
 //     }
     stage('Run maven') {
       steps {
-        //sh 'set'
-        //sh "echo OUTSIDE_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}"
+        sh 'set'
+        sh "echo OUTSIDE_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}"
         container('maven') {
           //sh 'echo MAVEN_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}'
           //sh 'mvn -version'
@@ -71,7 +71,8 @@ pipeline {
 //       }
       steps {
         container('helm') {
-          sh "helm upgrade --install --force --set name=${APP_NAME} --set image.repository=${ORIGIN_REPO}/${REPO_NAMESPACE}/${IMAGE_NAME} --set image.tag=${IMAGE_TAG} --set domain=${DOMAIN} --set controller.service.omitClusterIP=true ${APP_NAME}  ./helm"
+          sh "helm template ${APP_NAME} ./helm --set name=${APP_NAME} --set image.repository=${ORIGIN_REPO}/${REPO_NAMESPACE}/${IMAGE_NAME} --set image.tag=${IMAGE_TAG} --set domain=${DOMAIN} --set service.port=9090"
+          sh "helm upgrade  ${APP_NAME} ./helm --install --force=false --set name=${APP_NAME} --set image.repository=${ORIGIN_REPO}/${REPO_NAMESPACE}/${IMAGE_NAME} --set image.tag=${IMAGE_TAG} --set domain=${DOMAIN} --set service.port=9090"
         }
       }
     }
