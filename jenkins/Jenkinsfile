@@ -15,7 +15,7 @@ pipeline {
     ORIGIN_REPO='index.docker.io'
     REPO_NAMESPACE='qinhuazhao'
     IMAGE_NAME = "${APP_NAME}"
-    IMAGE_TAG = "${env.BRANCH_NAME + "-" + env.GIT_COMMIT}"
+    IMAGE_TAG = "${env.GIT_BRANCH + "-" + env.GIT_COMMIT}"
 
     DOMAIN = 'localhost'
 
