@@ -28,8 +28,8 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            - name: "SERVER_PORT"
-              value: {{ .Values.service.port }}
+            - name: SERVER_PORT
+              value: "{{ .Values.service.port }}"
           livenessProbe:
             httpGet:
               path: /actuator/health
