@@ -21,6 +21,10 @@ spec:
               items:
                 - key: .dockerconfigjson
                   path: config.json
+    - name: kubecfg
+      secret:
+        secretName: kubecfg-secret
+
   containers:
     - name: jnlp
       env:
@@ -81,6 +85,11 @@ spec:
       env:
         - name: CONTAINER_ENV_VAR
           value: kubectl
+      volumeMounts:
+        - name: kubecfg
+          readOnly: true
+          mountPath: "~/.kube"
+
     - name: helm
       image: alpine/helm:3.3.4
       command:
@@ -88,4 +97,8 @@ spec:
       tty: true
       env:
         - name: CONTAINER_ENV_VAR
-          value: kubectl
+          value: helm
+      volumeMounts:
+        - name: kubecfg
+          readOnly: true
+          mountPath: "~/.kube"
