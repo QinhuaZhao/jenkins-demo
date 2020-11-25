@@ -107,8 +107,12 @@ pipeline {
 //       }
       steps {
         container('helm') {
-          sh "helm template ${APP_NAME} ./helm --set name=${APP_NAME} --set image.repository=${ORIGIN_REPO}/${REPO_NAMESPACE}/${IMAGE_NAME} --set image.tag=${IMAGE_TAG} --set domain=${DOMAIN} --set service.port=9090"
-          sh "helm upgrade  ${APP_NAME} ./helm --install --force=false --set name=${APP_NAME} --set image.repository=${ORIGIN_REPO}/${REPO_NAMESPACE}/${IMAGE_NAME} --set image.tag=${IMAGE_TAG} --set domain=${DOMAIN} --set service.port=9090"
+          //仓库镜像发布
+          //sh "helm template ${APP_NAME} ./helm --set name=${APP_NAME} --set image.repository=${ORIGIN_REPO}/${REPO_NAMESPACE}/${IMAGE_NAME} --set image.tag=${IMAGE_TAG} --set domain=${DOMAIN} --set service.port=9090"
+          //sh "helm upgrade  ${APP_NAME} ./helm --install --force=false --set name=${APP_NAME} --set image.repository=${ORIGIN_REPO}/${REPO_NAMESPACE}/${IMAGE_NAME} --set image.tag=${IMAGE_TAG} --set domain=${DOMAIN} --set service.port=9090"
+          //使用本地镜像发布
+          sh "helm template ${APP_NAME} ./helm --set name=${APP_NAME} --set image.repository=${REPO_NAMESPACE}/${IMAGE_NAME} --set image.tag=${IMAGE_TAG} --set domain=${DOMAIN} --set service.port=9090"
+          sh "helm upgrade  ${APP_NAME} ./helm --install --force=false --set name=${APP_NAME} --set image.repository=${REPO_NAMESPACE}/${IMAGE_NAME} --set image.tag=${IMAGE_TAG} --set domain=${DOMAIN} --set service.port=9090"
         }
       }
     }
