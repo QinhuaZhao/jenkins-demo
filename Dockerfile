@@ -1,11 +1,12 @@
-FROM openjdk:8-alpine
-ENV PORT 8080
-ENV CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
-EXPOSE 8080
+FROM openjdk:8-alpine as builder
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} application.jar
+RUN java -Djarmode=layertools -jar application.jar extract
 
-# NOTE we assume there's only 1 jar in the target dir
-# but at least this means we don't have to guess the name
-# we could do with a better way to know the name - or to always create an app.jar or something
-COPY target/*.jar /opt/app.jar
-WORKDIR /opt
-CMD ["java", "-jar", "app.jar"]
+FROM openjdk:8-alpine
+COPY --from=builder dependencies/ ./
+#目前会报错,因为snapshot-dependencies文件夹下无内容, 暂无解决方法
+#COPY --from=builder snapshot-dependencies/ ./
+COPY --from=builder spring-boot-loader/ ./
+COPY --from=builder application/ ./
+ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
