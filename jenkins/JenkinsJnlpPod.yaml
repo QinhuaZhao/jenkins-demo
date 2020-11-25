@@ -13,6 +13,9 @@ spec:
       hostPath:
         path: /tmp/kaniko-cache"
         type: DirectoryOrCreate
+    - name: dockersock
+      hostPath:
+        path: /var/run/docker.sock
     - name: docker-cfg
       projected:
         sources:
@@ -45,6 +48,16 @@ spec:
       volumeMounts:
         - name: maven-repository
           mountPath: /root/.m2/repository
+    - name: docker
+      image: docker:19.03
+      command:
+        - cat
+      tty: true
+      securityContext:
+        privileged: true
+      volumeMounts:
+        - name: dockersock
+          mountPath: /var/run/docker.sock
     - name: kaniko
       image: gcr.io/kaniko-project/executor:debug
       command:
