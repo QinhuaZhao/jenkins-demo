@@ -9,21 +9,9 @@ spec:
       hostPath:
         path: /root/.m2/repository
         type: DirectoryOrCreate
-    - name: kaniko-cache
-      hostPath:
-        path: /tmp/kaniko-cache"
-        type: DirectoryOrCreate
     - name: dockersock
       hostPath:
         path: /var/run/docker.sock
-    - name: docker-cfg
-      projected:
-        sources:
-          - secret:
-              name: dockerhub-registry-regcred
-              items:
-                - key: .dockerconfigjson
-                  path: config.json
   containers:
     - name: jnlp
       env:
@@ -58,29 +46,6 @@ spec:
       volumeMounts:
         - name: dockersock
           mountPath: /var/run/docker.sock
-    - name: kaniko
-      image: gcr.io/kaniko-project/executor:debug
-      command:
-        - /busybox/cat
-      tty: true
-      env:
-        - name: CONTAINER_ENV_VAR
-          value: kaniko
-      volumeMounts:
-        - name: kaniko-cache
-          mountPath: /cache
-        - name: docker-cfg
-          mountPath: /kaniko/.docker
-    - name: kubectl
-      image: bitnami/kubectl:1.18.8
-      securityContext:
-        runAsUser: 1000
-      command:
-        - cat
-      tty: true
-      env:
-        - name: CONTAINER_ENV_VAR
-          value: kubectl
     - name: helm
       image: alpine/helm:3.3.4
       command:

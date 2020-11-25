@@ -1,151 +1,46 @@
 pipeline {
   agent {
-//     node{
-//       label 'slave-pipeline'
-//     }
     kubernetes {
       yamlFile 'jenkins/JenkinsJnlpPod.yaml'
     }
   }
   environment{
-    DEPLOY = "${env.BRANCH_NAME == "master" || env.BRANCH_NAME == "develop" ? "true" : "false"}"
     APP_NAME = readMavenPom().getArtifactId()
-    VERSION = readMavenPom().getVersion()
 
-    ORIGIN_REPO='index.docker.io'
-    REPO_NAMESPACE='qinhuazhao'
     IMAGE_NAME = "${APP_NAME}"
     BRANCH = sh(returnStdout: true, script: 'git rev-parse --abbrev-ref HEAD').trim()
     IMAGE_TAG = "${BRANCH + "-" + env.GIT_COMMIT}"
 
     DOMAIN = 'localhost'
-
-    //IMAGE_TAG =  sh(returnStdout: true,script: 'echo $image_tag').trim()
-    //ORIGIN_REPO =  sh(returnStdout: true,script: 'echo $origin_repo').trim()
-    //REPO =  sh(returnStdout: true,script: 'echo $repo').trim()
-    //BRANCH =  sh(returnStdout: true,script: 'echo $branch').trim()
   }
   stages {
-//     stage('Git'){
-//       steps{
-//         git branch: 'master', credentialsId: '', url: 'https://github.com/QinhuaZhao/demo.git'
-//       }
-//     }
     stage('pull code') {
       steps {
         container('git') {
-          //sh 'echo MAVEN_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}'
-          //sh 'mvn -version'
           sh 'git clone https://github.com/QinhuaZhao/travel.git'
         }
-        //container('busybox') {
-        //  sh 'echo BUSYBOX_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}'
-        //  sh '/bin/busybox'
-        //}
       }
     }
     stage('Run maven') {
       steps {
-        sh 'set'
-        sh "echo OUTSIDE_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}"
         container('maven') {
-          //sh 'echo MAVEN_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}'
-          //sh 'mvn -version'
           sh 'mvn package -B -DskipTests'
         }
-        //container('busybox') {
-        //  sh 'echo BUSYBOX_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}'
-        //  sh '/bin/busybox'
-        //}
       }
     }
     stage('Docker Build') {
-        //when {
-        //    environment name: 'DEPLOY', value: 'true'
-        //}
         steps {
             container('docker') {
                 sh "docker build -t ${REPO_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} ."
             }
         }
     }
-//     stage('Docker Publish') {
-//         when {
-//             environment name: 'DEPLOY', value: 'true'
-//         }
-//         steps {
-//             container('docker') {
-//                 withDockerRegistry([credentialsId: "${REGISTRY_CREDENTIAL}", url: ""]) {
-//                     sh "docker push ${REGISTRY}:${VERSION}"
-//                 }
-//             }
-//         }
-//     }
-
-//     stage('Image Build And Publish'){
-//       steps{
-//         container('kaniko') {
-//           //sh "echo ${CONTAINER_ENV_VAR}"
-//           //sh 'ls'
-//           sh 'cat /kaniko/.docker/config.json'
-//           sh '/kaniko/warmer --cache-dir=/cache --verbosity=debug --image=openjdk:8-alpine'
-//           sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --cache=true --cache-dir=/cache --skip-tls-verify --verbosity=debug --destination=${ORIGIN_REPO}/${REPO_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}'
-//           //sh "kaniko -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --cache=true --destination=${ORIGIN_REPO}/${REPO}/${IMAGE_NAME}:${IMAGE_TAG}"
-//         }
-//       }
-//     }
-//     stage('Deploy to Kubernetes'){
-//       steps{
-//         container('kubectl'){
-//           sh 'kubectl apply -f Deployment.yaml'
-//         }
-//       }
-//     }
-    stage('Kubernetes Deploy') {
-//       when {
-//         environment name: 'DEPLOY', value: 'true'
-//       }
+    stage('Helm Deploy') {
       steps {
         container('helm') {
-          //仓库镜像发布
-          //sh "helm template ${APP_NAME} ./helm --set name=${APP_NAME} --set image.repository=${ORIGIN_REPO}/${REPO_NAMESPACE}/${IMAGE_NAME} --set image.tag=${IMAGE_TAG} --set domain=${DOMAIN} --set service.port=9090"
-          //sh "helm upgrade  ${APP_NAME} ./helm --install --force=false --set name=${APP_NAME} --set image.repository=${ORIGIN_REPO}/${REPO_NAMESPACE}/${IMAGE_NAME} --set image.tag=${IMAGE_TAG} --set domain=${DOMAIN} --set service.port=9090"
-          //使用本地镜像发布
           sh "helm template ${APP_NAME} ./helm --set name=${APP_NAME} --set image.repository=${REPO_NAMESPACE}/${IMAGE_NAME} --set image.tag=${IMAGE_TAG} --set domain=${DOMAIN} --set service.port=9090"
           sh "helm upgrade  ${APP_NAME} ./helm --install --force=false --set name=${APP_NAME} --set image.repository=${REPO_NAMESPACE}/${IMAGE_NAME} --set image.tag=${IMAGE_TAG} --set domain=${DOMAIN} --set service.port=9090"
         }
-      }
-    }
-  }
-  post{
-    always{
-//       container('busybox') {
-//         sh 'echo BUSYBOX_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}'
-//         sh '/bin/busybox'
-//       }
-      script{
-        println("always")
-      }
-    }
-    success{
-      script{
-        println("success - 流水线成功")
-        //gitlab.ChangeCommitStatus(projectId,commitSha,"success")
-        //toemail.Email("流水线成功",userEmail)
-      }
-    }
-    failure{
-      script{
-        println("failure - 流水线失败了！")
-        //gitlab.ChangeCommitStatus(projectId,commitSha,"failed")
-        //toemail.Email("流水线失败了！",userEmail)
-      }
-    }
-    aborted{
-      script{
-        println("aborted - ")
-        //gitlab.ChangeCommitStatus(projectId,commitSha,"canceled")
-        //toemail.Email("流水线被取消了！",userEmail)
       }
     }
   }
