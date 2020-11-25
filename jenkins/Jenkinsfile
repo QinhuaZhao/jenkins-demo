@@ -31,6 +31,19 @@ pipeline {
 //         git branch: 'master', credentialsId: '', url: 'https://github.com/QinhuaZhao/demo.git'
 //       }
 //     }
+    stage('pull code') {
+      steps {
+        container('git') {
+          //sh 'echo MAVEN_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}'
+          //sh 'mvn -version'
+          sh 'git clone https://github.com/QinhuaZhao/oss-spring-boot.git'
+        }
+        //container('busybox') {
+        //  sh 'echo BUSYBOX_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}'
+        //  sh '/bin/busybox'
+        //}
+      }
+    }
     stage('Run maven') {
       steps {
         sh 'set'
