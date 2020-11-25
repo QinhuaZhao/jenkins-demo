@@ -18,7 +18,7 @@ pipeline {
     stage('pull code') {
       steps {
         container('git') {
-          sh 'git clone https://github.com/QinhuaZhao/travel.git'
+          //sh 'git clone https://github.com/QinhuaZhao/travel.git'
         }
       }
     }
