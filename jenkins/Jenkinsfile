@@ -39,8 +39,8 @@ pipeline {
     stage('Helm Deploy') {
       steps {
         container('helm') {
-          sh "helm template ${APP_NAME} ./helm --set name=${APP_NAME} --set image.pullPolicy=IfNotPresent --set image.repository=${REPO_NAMESPACE}/${IMAGE_NAME} --set image.tag=${IMAGE_TAG} --set domain=${DOMAIN} --set service.port=9090"
-          sh "helm upgrade  ${APP_NAME} ./helm --install --force=false --set image.pullPolicy=IfNotPresent --set name=${APP_NAME} --set image.repository=${REPO_NAMESPACE}/${IMAGE_NAME} --set image.tag=${IMAGE_TAG} --set domain=${DOMAIN} --set service.port=9090"
+          sh "helm template ${APP_NAME} ./helm --set name=${APP_NAME} --set image.pullPolicy=IfNotPresent --set image.repository=${REPO_NAMESPACE}/${IMAGE_NAME} --set image.tag=${IMAGE_TAG} --set domain=${DOMAIN} --set service.port=80"
+          sh "helm upgrade  ${APP_NAME} ./helm --install --force=false --set image.pullPolicy=IfNotPresent --set name=${APP_NAME} --set image.repository=${REPO_NAMESPACE}/${IMAGE_NAME} --set image.tag=${IMAGE_TAG} --set domain=${DOMAIN} --set service.port=80"
         }
       }
     }
