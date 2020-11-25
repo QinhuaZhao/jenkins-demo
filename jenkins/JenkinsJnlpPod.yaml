@@ -21,10 +21,6 @@ spec:
               items:
                 - key: .dockerconfigjson
                   path: config.json
-    - name: kubecfg
-      secret:
-        secretName: kubecfg-secret
-
   containers:
     - name: jnlp
       env:
@@ -54,27 +50,6 @@ spec:
           mountPath: /cache
         - name: docker-cfg
           mountPath: /kaniko/.docker
-#    - name: kaniko-warmer
-#      image: gcr.io/kaniko-project/executor:debug
-#      command:
-#        - /busybox/cat
-#      tty: true
-#      env:
-#        - name: CONTAINER_ENV_VAR
-#          value: kaniko-warmer
-#      volumeMounts:
-#        - name: kaniko-cache
-#          mountPath: /cache
-#        - name: docker-cfg
-#          mountPath: /kaniko/.docker
-#    - name: busybox
-#      image: busybox:latest
-#      command:
-#        - cat
-#      tty: true
-#      env:
-#        - name: CONTAINER_ENV_VAR
-#          value: busybox
     - name: kubectl
       image: bitnami/kubectl:1.18.8
       securityContext:
@@ -85,11 +60,6 @@ spec:
       env:
         - name: CONTAINER_ENV_VAR
           value: kubectl
-      volumeMounts:
-        - name: kubecfg
-          readOnly: true
-          mountPath: "~/.kube"
-
     - name: helm
       image: alpine/helm:3.3.4
       command:
@@ -98,7 +68,3 @@ spec:
       env:
         - name: CONTAINER_ENV_VAR
           value: helm
-      volumeMounts:
-        - name: kubecfg
-          readOnly: true
-          mountPath: "~/.kube"
