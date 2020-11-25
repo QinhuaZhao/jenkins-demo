@@ -36,7 +36,7 @@ pipeline {
         container('git') {
           //sh 'echo MAVEN_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}'
           //sh 'mvn -version'
-          sh 'git clone https://github.com/QinhuaZhao/oss-spring-boot.git'
+          sh 'git clone https://github.com/QinhuaZhao/travel.git'
         }
         //container('busybox') {
         //  sh 'echo BUSYBOX_CONTAINER_ENV_VAR = ${CONTAINER_ENV_VAR}'
