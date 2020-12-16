@@ -22,6 +22,11 @@ master:
   overwritePlugins: true
   ingress:
     enabled: false
+    paths:
+      - /*
+    hostName: jenkins.localhost
+    annotations:
+      kubernetes.io/ingress.class: istio
 agent:
   enabled: true
   image: "jenkins/inbound-agent"
@@ -29,6 +34,3 @@ agent:
   alwaysPullImage: false
 persistence:
   enabled: false
-  hostName: jenkins.localhost
-  annotations:
-    kubernetes.io/ingress.class: istio
